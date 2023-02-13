@@ -23,15 +23,15 @@ app.use(express.static('public'))
 app.use(
     express.urlencoded({
         extended: true
-        
-}) 
+
+    })
 )/*A quinta linha app.use(express.urlencoded({ extended: true })) é uma 
 chamada para o middleware do Express que analisa o corpo das solicitações 
 POST e adiciona os dados ao objeto de solicitação como propriedades.
  O objeto { extended: true } é uma opção que permite que dados complexos 
  sejam transmitidos através do corpo da solicitação.*/
 
- app.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.render('home', { layout: false })/*O res.render, irá renderizar os 
     arquivos de acordo com o engine de views utilizado no sistema, que no caso
     aqui é a pagina home do handlebars*/
@@ -44,8 +44,8 @@ app.post('/prod/insertprod', (req, res) => {
 
     const sql = `INSERT INTO produto (nome, qtd) VALUES ('${nome}', '${quant}')`
 
-    conn.query(sql, function(err){
-        if (err){
+    conn.query(sql, function (err) {
+        if (err) {
             console.log(err)
         }
 
@@ -55,11 +55,11 @@ app.post('/prod/insertprod', (req, res) => {
 
 //app.use(express.json) 
 app.get('/prod', (req, res) => {
-    const sql  = 'SELECT * FROM produto'
+    const sql = 'SELECT * FROM produto'
 
-    conn.query(sql, function(err, data){
-        
-        if(err){
+    conn.query(sql, function (err, data) {
+
+        if (err) {
             console.log(err)
             return
         }
@@ -75,48 +75,38 @@ app.get('/prod', (req, res) => {
 app.get('/prod/:id', (req, res) => {
     const id = req.params.id
 
-    const sql  = `SELECT * FROM produto where ${id}`
+    const sql = `SELECT * FROM produto where ${id}`
 
-    conn.query(sql, function(err, data){
-        if (err){
+    conn.query(sql, function (err, data) {
+        if (err) {
             console.log(err)
             return
         }
 
-        const listarProd = data[id-1]
+        const listarProd = data[id - 1]
         res.render('produto', { layout: false, listarProd })
-    }) 
+    })
 
 })
 
-app.get('/prod/edit/:id' , (req, res) => {
+app.get('/prod/edit/:id', (req, res) => {
 
-const id = req.params.id
+    const id = req.params.id
 
-const sql = `SELECT * FROM produto where id =${id}`;
+    const sql = `SELECT * FROM produto where id =${id}`;
 
-conn.query(sql, function(err, data){
-    if(err){
-        console.log(err)
-        return
-    }
+    conn.query(sql, function (err, data) {
+        if (err) {
+            console.log(err)
+            return
+        }
 
-    const prod = data[0]
-    res.render('edit', {layout: false, prod})
-})
+        const prod = data[0]
+        res.render('edit', { layout: false, prod })
+    })
 
-
-})
-
-const conn = mysql.createConnection({
-    host: '127.0.0.1',
-    user:'root',
-    port:'3306',
-    password: '',
-    database: 'teste'
 
 })
-
 
 //pegando para editar registro
 app.get('/prod/edit/:id', (req, res) => {
@@ -125,15 +115,15 @@ app.get('/prod/edit/:id', (req, res) => {
 
     const sql = `SELECT *  FROM produto where id = ${id}`
 
-    conn.query(sql, function(err, data){
-        if(err){
+    conn.query(sql, function (err, data) {
+        if (err) {
             console.log(err)
             return
         }
 
         const prod = data[0]
-        res.render('edit', {layout: false, prod })
-        
+        res.render('edit', { layout: false, prod })
+
     })
 })
 
@@ -146,8 +136,8 @@ app.post('/prod/updateprod', (req, res) => {
 
     const sql = `UPDATE produto SET nome = '${nome}', qtd = '${quant}' WHERE id = '${id}'`
 
-    conn.query(sql, function(err){
-        if(err){
+    conn.query(sql, function (err) {
+        if (err) {
             console.log(err)
             return
         }
@@ -157,8 +147,34 @@ app.post('/prod/updateprod', (req, res) => {
 
 })
 
-conn.connect(function(err) {
-    if(err){
+//delete um registro
+
+app.get('/prod/remove/:id', (req, res) => {
+    const id = req.params.id 
+
+    const sql = `DELETE FROM produto WHERE id = '${id}'`
+
+    conn.query(sql, function(err){
+        if(err){
+            console.log(err
+                );
+                return
+        }
+        res.redirect()
+    })
+})
+
+const conn = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'root',
+    port: '3307',
+    password: '',
+    database: 'teste'
+
+})
+
+conn.connect(function (err) {
+    if (err) {
         console.log(err)
     }
 
