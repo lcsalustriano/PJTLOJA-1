@@ -150,18 +150,37 @@ app.post('/prod/updateprod', (req, res) => {
 //delete um registro
 
 app.get('/prod/remove/:id', (req, res) => {
-    const id = req.params.id 
+    const id = req.params.id
 
     const sql = `DELETE FROM produto WHERE id = '${id}'`
 
-    conn.query(sql, function(err){
-        if(err){
+    conn.query(sql, function (err) {
+        if (err) {
             console.log(err
-                );
-                return
+            );
+            return
         }
-        res.redirect()
+
+        res.redirect('/prod')
     })
+})
+
+//consulta um registro pelo id (produto.handlebars)
+app.get('/prod/:id', (req, res) => {
+    const id = req.params.id
+
+    const sql = `SELECT * FROM produto WHERE id = ${id}`
+
+    conn.query(sql, function (err, data) {
+        if (err) {
+            console.log(err);
+            return
+        }
+
+        const listarProd = data[0]
+        res.render('produto', { layout: false, listarProd })
+    })
+
 })
 
 const conn = mysql.createConnection({
