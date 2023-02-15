@@ -174,17 +174,17 @@ app.get('/busca', (req, res) => {
 //Rota busca
 app.post('/busc/', (req, res) => {
     const id = req.body.id
-    
+
     const sql = `SELECT * FROM produto WHERE id = ${id}`
 
-    conn.query(sql, function(err, data){
-        if(err){
+    conn.query(sql, function (err, data) {
+        if (err) {
             console.log(err)
             return
         }
 
         const listarProd = data[0]
-        res.render('produto', {  layout: false, listarProd } )
+        res.render('produto', { layout: false, listarProd })
 
     })
 })
